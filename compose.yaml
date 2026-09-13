@@ -1,0 +1,19 @@
+name: weijin
+services:
+  db:
+    image: postgres:16.6-alpine3.20
+    environment:
+      POSTGRES_USER: weijin
+      POSTGRES_PASSWORD: local-development-only
+      POSTGRES_DB: weijin
+    ports:
+      - "127.0.0.1:55438:5432"
+    volumes:
+      - story_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U weijin -d weijin"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+volumes:
+  story_data:

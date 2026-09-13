@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>未尽 · 对话写作设计提案</title>
+    <link rel="stylesheet" href="./studio.css" />
+    <script src="./studio.js" defer></script>
+  </head>
+  <body>
+    <div class="preview">
+      交互设计提案 · 示例内容 · 未连接模型 <a href="/">返回当前应用 ↗</a>
+    </div>
+    <header>
+      <a class="brand" href="/">未尽<span>写作室</span></a>
+      <div class="path">余信 <span>/</span> 第一章</div>
+      <div class="header-actions">
+        <span class="local">● 本页演示</span
+        ><button id="focus">专注正文</button>
+      </div>
+    </header>
+    <main class="studio">
+      <nav class="shelf" aria-label="作品结构">
+        <div class="book-mark">
+          余<br />信<span>一部关于未说出口的小说</span>
+        </div>
+        <div class="section-label">手稿 <span>01 / 03</span></div>
+        <button class="chapter active">
+          <small>01</small><span>回信之前<em>正在修订</em></span
+          ><i>●</i>
+        </button>
+        <div class="chapter">
+          <small>02</small><span>重逢<em>章节计划</em></span>
+        </div>
+        <div class="chapter">
+          <small>03</small><span>旧日来客<em>章节计划</em></span>
+        </div>
+        <div class="section-label lower">故事底稿</div>
+        <button id="bible-toggle" class="nav-link">
+          人物与设定 <span>↗</span>
+        </button>
+        <div class="bible" id="bible" hidden>
+          <b>林舟 / 沈遥</b>
+          <p>久别重逢。林舟习惯隐瞒情绪。</p>
+          <b>叙事边界</b>
+          <p>此时林舟不知道是谁寄信。读者与他共享限知视角。</p>
+        </div>
+        <div class="shelf-foot">
+          你的故事，由你定稿。<br /><span>AI 提案始终保留原文</span>
+        </div>
+      </nav>
+      <section class="manuscript" aria-label="正文与修订">
+        <div class="document-bar">
+          <span>正文 <span class="separator">/</span> 第三人称 · 限知</span
+          ><span class="version" id="version">原稿 · 示例</span>
+        </div>
+        <div class="document-scroll">
+          <article>
+            <div class="chapter-meta">
+              <span>第一章</span><span>MANUSCRIPT / 001</span>
+            </div>
+            <h1>回信之前</h1>
+            <div class="title-rule"></div>
+            <p>信封在门缝里躺了一夜。</p>
+            <p>
+              林舟拿起它时，纸角还带着雨水的凉意。没有寄件人，没有邮戳，只有他多年以前用过的名字。
+            </p>
+            <p>
+              他沿着封口慢慢拆开。信纸很薄，字迹透到背面，像一句早已说过、又被收回的话。
+            </p>
+            <div class="revision" id="revision">
+              <div class="revision-label" id="revision-label">
+                选中段落 <button id="quote">带入对话 ↗</button>
+              </div>
+              <p id="original">
+                他很难过，也很想念沈遥。这封信让他想起他们分开的那一天，他不知道该不该回去。
+              </p>
+              <p id="replacement" hidden>
+                他把信纸折回原来的形状，折痕却始终对不齐。桌上的茶早凉了。他端起来，又放下。直到楼下传来收伞的声音，他才抬头看了一眼门。
+              </p>
+              <div class="revision-actions" id="revision-actions" hidden>
+                <span>仅替换此段 · 示例修改</span
+                ><button id="dismiss">保留原文</button
+                ><button class="accept" id="apply">采用这段</button>
+              </div>
+            </div>
+            <p>窗外的雨停了。他却迟迟没有放下那张纸。</p>
+            <div class="end-mark">＊</div>
+          </article>
+          <footer class="document-foot">
+            <span>场景目标：收到信，但尚未决定赴约</span
+            ><span>作者掌握叙事权</span>
+          </footer>
+        </div>
+      </section>
+      <aside class="collaborator" aria-label="创作对话">
+        <div class="chat-header">
+          <div>
+            <span class="assistant-mark">未</span><strong>创作对话</strong>
+          </div>
+          <span>本章会话</span>
+        </div>
+        <div class="conversation" aria-live="polite">
+          <div class="conversation-date">围绕「回信之前」的修改</div>
+          <div class="user-message">
+            <span class="message-author">你</span>
+            <p>这段太直白了。让他明明想念，却装作不在意。不要增加新的往事。</p>
+            <div class="quote-ref">↳ 第一章 · 第 4 段</div>
+          </div>
+          <div class="assistant-message">
+            <span class="message-author">未尽 <small>示例回复</small></span>
+            <p>
+              可以把情绪藏进动作里：让他试着收好信，却连一道折痕都处理不好。
+            </p>
+            <p class="secondary">
+              保留寄信人未知的设定，不添加两人的共同回忆。只改选中这一段。
+            </p>
+            <details>
+              <summary>参考了哪些内容 <span>3 项</span></summary>
+              <ul>
+                <li>本章原稿与选中段落</li>
+                <li>林舟的人物设定：克制</li>
+                <li>故事边界：寄信人未知</li>
+              </ul>
+              <p>这是上下文来源示意，不是模型思考过程。</p>
+            </details>
+            <button id="proposal" class="proposal">
+              <span class="proposal-icon">¶</span
+              ><span
+                ><b>把情绪写进动作</b
+                ><small>段落修改提案 · 保留前后文</small></span
+              ><span>↗</span>
+            </button>
+            <div class="proposal-foot">点击提案，在正文中对照原稿。</div>
+          </div>
+          <div id="notice" role="status"></div>
+        </div>
+        <div class="composer-area">
+          <div class="context-chip" id="context-chip">
+            ↳ 第一章 · 已选中第 4 段 <span>固定示例</span>
+          </div>
+          <label for="instruction" class="sr-only">创作要求示例</label>
+          <div class="composer">
+            <textarea id="instruction" readonly>
+少一点心理解释，多一点动作和停顿。</textarea
+            >
+            <div class="composer-toolbar">
+              <span>修改选段 <span class="chevron">⌄</span></span
+              ><button id="demo-send" aria-label="演示改稿流程">
+                演示改稿 ↑
+              </button>
+            </div>
+          </div>
+          <p class="composer-note">交互演示不发送请求，也不保存到作品。</p>
+        </div>
+      </aside>
+    </main>
+  </body>
+</html>

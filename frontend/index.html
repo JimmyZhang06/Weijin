@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#232c27" />
+    <title>未尽 · 写作室</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/studio.css" />
+    <link rel="stylesheet" href="/select.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <div class="application">
+      <aside class="sidebar" id="sidebar">
+        <div class="identity">
+          <button class="brand" id="home" aria-label="回到作品集">
+            <span class="brand-symbol">未</span><strong>未尽</strong></button
+          ><button
+            id="create-open"
+            class="new-project compact-create"
+            aria-label="新建作品"
+          >
+            ＋
+          </button>
+        </div>
+
+        <button id="library-nav" class="nav-entry">
+          <span aria-hidden="true">‹</span> 我的作品
+          <span id="world-count">0</span>
+        </button>
+        <div id="book-nav" hidden>
+          <div class="project">
+            <div class="mini-cover" id="mini-cover">未</div>
+            <div class="project-text">
+              <h2 id="side-title"></h2>
+              <span id="project-type">原创小说</span>
+            </div>
+            <span id="chapter-count" hidden></span>
+          </div>
+
+          <label class="route-control" aria-label="故事路线"
+            ><select id="routes" aria-label="故事路线"></select
+          ></label>
+          <div class="side-label side-heading">
+            章节目录
+            <button
+              id="add-chapter"
+              aria-label="新建章节"
+              title="新建章节，直接落笔"
+            >
+              ＋
+            </button>
+          </div>
+          <div id="chapter-list" class="chapter-list"></div>
+          <div class="side-label side-heading">
+            待定稿 <span id="draft-count">0</span>
+          </div>
+          <div id="draft-list" class="chapter-list"></div>
+          <div class="side-label material-label">故事资料</div>
+          <nav class="workspace-tabs" aria-label="作品工具">
+            <button data-view="manuscript" class="active">手稿正文</button
+            ><button data-view="settings">人物与设定</button
+            ><button data-view="extras">
+              角色旁页 <span id="extra-count">0</span>
+            </button>
+          </nav>
+          <button id="outline-nav" class="nav-entry">
+            <span aria-hidden="true">▤</span> 世界与章纲</button
+          ><button data-view="autowrite" class="auto-launch">
+            <span class="auto-mark" aria-hidden="true">✧</span
+            ><span>全 AI 写作<small>从想法到完整初稿</small></span
+            ><span aria-hidden="true">↗</span>
+          </button>
+        </div>
+        <div class="sidebar-bottom">
+          <div class="avatar">作</div>
+          <div>本地作者<small>本地写作空间</small></div>
+          <span class="connection-dot" id="connection-dot"></span>
+        </div>
+      </aside>
+      <div class="app-shell">
+        <header class="topbar">
+          <div class="breadcrumb">
+            <button id="mobile-menu" aria-label="展开导航">☰</button
+            ><span class="crumb-icon" aria-hidden="true">▤</span
+            ><span>手稿</span><span class="slash">/</span
+            ><strong id="breadcrumb-title">作品集</strong>
+          </div>
+          <div class="top-actions">
+            <button id="focus-toggle" class="text-button">专注</button
+            ><button
+              id="inspector-toggle"
+              class="secondary"
+              aria-expanded="true"
+            >
+              创作搭档
+            </button>
+            <details class="appearance-menu">
+              <summary aria-label="显示与作品选项">···</summary>
+              <div class="appearance-items">
+                <span class="menu-caption">显示与作品</span>
+                <button
+                  id="theme-toggle"
+                  class="text-button"
+                  aria-label="切换深浅主题"
+                >
+                  深色</button
+                ><button
+                  id="type-toggle"
+                  class="text-button"
+                  aria-label="调整正文字号"
+                >
+                  使用大字号</button
+                ><a id="export" class="secondary">导出正文 ↗</a
+                ><button
+                  id="help-toggle"
+                  class="icon-button"
+                  aria-label="查看当前能力"
+                >
+                  模型与运行状态
+                </button>
+              </div>
+              <span class="provider-badge">模板模式 <i></i></span>
+            </details>
+          </div>
+        </header>
+        <div id="capability" class="capability" hidden>
+          已连接本地数据库与任务进程。设定、大纲、手写稿及版本真实保存；AI
+          目前仅有固定模板，不具备原作理解或自动语义审校。
+        </div>
+        <main>
+          <section id="library" class="library">
+            <div class="library-heading">
+              <div>
+                <div class="eyebrow">THE WRITING ROOM / 01</div>
+                <h1>让故事，有处落笔。</h1>
+                <p>从一个人物、一段关系，或一句始终没有写下的话开始。</p>
+              </div>
+              <button id="create-library" class="primary">新建作品 ↗</button>
+            </div>
+            <div class="library-divider">
+              <h2>我的作品</h2>
+              <span id="library-meta">私人书架</span>
+            </div>
+            <div id="worlds" class="books"></div>
+            <div class="start-note">
+              <span class="note-index">序</span>
+              <div>
+                <h3>先有你的故事，再有创作工具。</h3>
+                <p>记录原作锚点与人物边界，安排章纲，亲手修改每一份稿件。</p>
+              </div>
+              <button id="demo" class="text-button">试用原创示例 ↗</button>
+            </div>
+          </section>
+          <section id="workspace" hidden>
+            <div class="workspace-head" hidden>
+              <div>
+                <div class="eyebrow" id="work-type">MANUSCRIPT</div>
+                <h1 id="work-title"></h1>
+                <div class="work-subline">
+                  <span id="work-relation"></span
+                  ><span id="revision-label"></span>
+                </div>
+              </div>
+              <div class="workspace-actions"></div>
+            </div>
+
+            <div class="workspace-grid" id="workspace-grid">
+              <div class="main-column">
+                <section id="manuscript-view">
+                  <div class="editor-toolbar">
+                    <div>
+                      <span class="status-pill" id="editor-status">未落笔</span
+                      ><span id="save-status">开始你的第一章</span>
+                    </div>
+                    <div class="editor-tools">
+                      <button id="discard-local" class="text-button" hidden>
+                        撤销未保存修改
+                      </button>
+                      <button id="fork-open" class="text-button" hidden>
+                        另开路线</button
+                      ><button id="next-chapter" class="secondary" hidden>
+                        继续下一章</button
+                      ><button id="edit-scene" class="text-button" hidden>
+                        修订本章</button
+                      ><button id="save-draft" class="secondary">
+                        保存草稿</button
+                      ><button id="accept-draft" class="primary" hidden>
+                        定稿
+                      </button>
+                    </div>
+                  </div>
+                  <div id="task-banner" class="task-banner" hidden>
+                    <span class="pulse-dot"></span>
+                    <div>
+                      <strong id="task-status"></strong
+                      ><small>任务结果独立保存，离开页面后仍可找回。</small>
+                    </div>
+                    <button id="cancel-job" class="text-button">停止</button>
+                  </div>
+                  <div class="manuscript-paper">
+                    <details id="draft-comparison" hidden>
+                      <summary>对照修改前的正文</summary>
+                      <pre id="comparison-before"></pre>
+                    </details>
+                    <div class="paper-kicker">
+                      <span id="chapter-kicker">CHAPTER 01</span
+                      ><span id="pov-label">第三人称 · 限知</span>
+                    </div>
+                    <label class="sr-only" for="editor-title">章节标题</label
+                    ><input
+                      id="editor-title"
+                      maxlength="120"
+                      placeholder="为这一章命名"
+                    />
+                    <div class="paper-line"></div>
+                    <details id="scene-intent" class="scene-intent" hidden>
+                      <summary>本章创作意图</summary>
+                      <p id="scene-intent-text"></p>
+                    </details>
+                    <label class="sr-only" for="editor-body">章节正文</label
+                    ><textarea
+                      id="editor-body"
+                      maxlength="50000"
+                      placeholder="从这里落笔。
+
+一个人走进房间。或者，一个人始终没有回来。"
+                    ></textarea>
+                    <button
+                      type="button"
+                      id="quote-selection"
+                      class="text-button"
+                    >
+                      引用选中文字到对话 ↗
+                    </button>
+                  </div>
+                  <div class="below-paper">
+                    <p id="editor-note">
+                      草稿与定稿分别保存，每次定稿都会留下独立版本。
+                    </p>
+                    <div class="actions">
+                      <button id="reject-draft" class="text-button" hidden>
+                        暂不采用</button
+                      ><button id="template-generate" class="text-button">
+                        用模板起稿 ↗
+                      </button>
+                    </div>
+                  </div>
+                  <div class="paper-bottom">
+                    <span id="word-count">0 字</span
+                    ><span id="target-count"></span
+                    ><span id="source-label">作者手写</span>
+                  </div>
+                </section>
+                <section id="autowrite-view" hidden>
+                  <div class="auto-heading">
+                    <span class="eyebrow">AUTONOMOUS WRITING</span>
+                    <h2>交给它落笔。<br />故事的方向，由你决定。</h2>
+                    <p>
+                      从一个念头，到一份完整初稿。AI
+                      规划章节，承接前文，逐章写下去。
+                    </p>
+                  </div>
+                  <form id="auto-form" class="auto-brief">
+                    <label for="auto-prompt">你想读到一个怎样的故事？</label
+                    ><textarea
+                      id="auto-prompt"
+                      required
+                      maxlength="4000"
+                      placeholder="例如：写一篇久别重逢的短篇。两人因为一封退回的信再次见面；关系慢慢推进，结局留一点希望。沿用作品中的人物与设定。"
+                    ></textarea>
+                    <div class="field-grid">
+                      <label
+                        >本轮章节数<select id="auto-count">
+                          <option value="3">3 章 · 短篇</option>
+                          <option value="5">5 章 · 中篇起步</option>
+                          <option value="8">8 章 · 长篇开篇</option>
+                          <option value="1">1 章 · 试写</option>
+                        </select></label
+                      ><label
+                        >每章目标<select id="auto-words">
+                          <option value="1200">约 1,200 字</option>
+                          <option value="800">约 800 字</option>
+                          <option value="2000">约 2,000 字</option>
+                        </select></label
+                      >
+                    </div>
+                    <div class="auto-contract">
+                      <span>01　规划章纲</span><span>02　连续成文</span
+                      ><span>03　由你审阅</span>
+                    </div>
+                    <p id="auto-config" class="muted"></p>
+                    <p id="auto-budget" class="muted"></p>
+                    <button id="auto-start" type="submit" class="primary">
+                      开始全 AI 写作
+                    </button>
+                    <p class="hint">
+                      使用已保存的作品设定与最近三章。初稿独立保存，不自动定稿；字数为创作目标。
+                    </p>
+                  </form>
+                  <div class="auto-history-label">
+                    <h3>写作记录</h3>
+                    <span>离开页面，进度仍会保留</span>
+                  </div>
+                  <div id="auto-runs" aria-live="polite"></div>
+                </section>
+                <section id="settings-view" hidden>
+                  <form id="settings-form" class="settings-form">
+                    <div class="section-title">
+                      <div>
+                        <span class="eyebrow">STORY BIBLE</span>
+                        <h2>先确定，这是谁的故事。</h2>
+                      </div>
+                      <button type="submit" class="primary">保存设定</button>
+                    </div>
+                    <div class="field-grid">
+                      <label
+                        >创作类型<select name="work_type">
+                          <option value="original">原创小说</option>
+                          <option value="fanfic">同人创作</option>
+                        </select></label
+                      ><label
+                        >叙事视角<select name="pov">
+                          <option value="third_limited">第三人称 · 限知</option>
+                          <option value="first">第一人称</option>
+                          <option value="omniscient">第三人称 · 全知</option>
+                        </select></label
+                      ><label
+                        >原作 / 世界来源<input
+                          name="fandom"
+                          maxlength="300"
+                          placeholder="同人填写原作名；原创可留空" /></label
+                      ><label
+                        >核心关系 / CP<input
+                          name="relationship"
+                          maxlength="500"
+                          placeholder="伙伴、宿敌、重逢，或一组人物关系"
+                      /></label>
+                    </div>
+                    <label
+                      >原作锚点与时间线<textarea
+                        name="canon_anchor"
+                        maxlength="1000"
+                        placeholder="从原作哪个事件之后开始？哪些事件已经发生？"
+                      ></textarea></label
+                    ><label
+                      >AU / 分歧点<textarea
+                        name="divergence"
+                        maxlength="1500"
+                        placeholder="相对于原作，哪些条件发生了变化？"
+                      ></textarea></label
+                    ><label
+                      >不可改动的边界<textarea
+                        name="boundaries"
+                        maxlength="2000"
+                        placeholder="人物底线、结局禁区、必须保留的原作事实。"
+                      ></textarea></label
+                    ><label
+                      >文风与节奏<input
+                        name="style"
+                        maxlength="1000"
+                        placeholder="例如：克制、留白、慢热；用行动推进关系"
+                    /></label>
+                    <div class="section-title small">
+                      <h2>人物，不只是一个名字。</h2>
+                      <span class="muted">核心特点修改需要确认</span>
+                    </div>
+                    <div id="character-fields" class="character-fields"></div>
+                    <label class="check-label"
+                      ><input
+                        type="checkbox"
+                        name="allow_locked_changes"
+                      />本次允许修改人物核心特点；已定稿正文保持原样</label
+                    >
+                    <div class="section-title small">
+                      <h2>章节计划</h2>
+                      <button type="button" id="plan-add" class="secondary">
+                        ＋ 添加一章
+                      </button>
+                    </div>
+                    <p class="muted">
+                      章纲是创作意图，不是已经发生的事实。保存后可逐章起稿。
+                    </p>
+                    <div id="plan-fields"></div>
+                    <button type="submit" class="primary">
+                      保存设定与章纲
+                    </button>
+                  </form>
+                </section>
+                <section id="extras-view" hidden>
+                  <div class="section-title">
+                    <div>
+                      <span class="eyebrow">BETWEEN THE LINES</span>
+                      <h2>正文之外，仍有回声。</h2>
+                    </div>
+                  </div>
+                  <p class="muted">
+                    旁页依附于已经定稿的章节。选择人物与场景，保留正文没有说出口的部分。
+                  </p>
+                  <div class="extras-controls">
+                    <label>关联章节<select id="extra-scene"></select></label
+                    ><label>人物<select id="extra-person"></select></label>
+                  </div>
+                  <div class="extra-types">
+                    <button data-extra="unsent_letter">
+                      <span>01 / LETTER</span><strong>未寄出的信</strong
+                      ><small>没有送达的表达</small></button
+                    ><button data-extra="diary">
+                      <span>02 / JOURNAL</span><strong>角色日记</strong
+                      ><small>只属于他的记录</small></button
+                    ><button data-extra="perspective">
+                      <span>03 / PERSPECTIVE</span><strong>另一种视角</strong
+                      ><small>同一事件，另一面</small>
+                    </button>
+                  </div>
+                  <p class="hint">
+                    当前使用固定模板，生成后须修改、确认；不会自动理解原作。
+                  </p>
+                  <div id="extra-list"></div>
+                  <article
+                    id="extra-content"
+                    class="letter-paper"
+                    hidden
+                  ></article>
+                </section>
+              </div>
+            </div>
+          </section>
+        </main>
+        <footer class="app-footer">
+          <span>未尽 · PRIVATE WRITING STUDIO</span
+          ><span id="health-label">连接中…</span>
+        </footer>
+      </div>
+      <aside class="inspector" id="inspector">
+        <div class="chat-heading">
+          <span class="assistant-identity"
+            ><span class="ai-symbol" aria-hidden="true">✧</span
+            ><strong>创作搭档</strong></span
+          ><span id="chat-model">未配置模型</span>
+        </div>
+        <div class="inspector-tabs">
+          <button data-inspect="chat" class="active">创作对话</button
+          ><button data-inspect="context">上下文</button
+          ><button data-inspect="activity">执行</button
+          ><button data-inspect="history">版本</button>
+        </div>
+        <div id="chat-panel">
+          <div id="chat-target" class="chat-target">当前作品</div>
+
+          <div
+            id="chat-messages"
+            class="chat-messages"
+            aria-live="polite"
+          ></div>
+          <form id="chat-form">
+            <div id="chat-selection" class="chat-selection" hidden>
+              <span id="chat-selection-text"></span
+              ><button type="button" id="clear-selection" aria-label="取消引用">
+                ×
+              </button>
+            </div>
+            <div class="composer">
+              <textarea
+                id="chat-input"
+                maxlength="4000"
+                placeholder="聊聊你的故事，或告诉我下一步想写什么…"
+                required
+              ></textarea>
+              <div class="chat-tools">
+                <label class="sr-only" for="chat-mode">创作方式</label
+                ><select id="chat-mode">
+                  <option value="discuss">讨论剧情</option>
+                  <option value="write">起草本章</option>
+                  <option value="revise">修改当前稿</option></select
+                ><button type="button" id="chat-stop" hidden>停止</button
+                ><button type="submit" id="chat-send" aria-label="发送消息">
+                  <svg viewbox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 12 6-6 6 6M12 6v13"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <label for="chat-input" class="sr-only"
+              >与 AI 讨论或交代写作要求</label
+            >
+
+            <p class="chat-disclosure">AI 稿件由你审阅后定稿。</p>
+            <details class="model-config">
+              <summary>模型接入与上下文范围</summary>
+              <p id="ai-config-message"></p>
+              <p>
+                密钥仅保存在
+                backend/.env。发送时包含作品设定、最近三章、当前稿件及同版本的近期对话。角色私密知识不会自动提供给模型。
+              </p>
+            </details>
+          </form>
+        </div>
+        <div id="context-panel" hidden>
+          <div class="inspector-heading">本章的方向<span>BRIEF</span></div>
+          <div id="context-brief"></div>
+          <div class="inspector-heading">人物与信息边界<span>CAST</span></div>
+          <div id="context-cast"></div>
+          <div id="character-knowledge" hidden></div>
+          <div class="inspector-heading">检查结果<span>REVIEW</span></div>
+          <div id="review-panel">
+            <p class="muted">保存草稿后，查看结构检查。</p>
+          </div>
+        </div>
+        <div id="activity-panel" hidden>
+          <div class="inspector-heading">实际执行记录</div>
+          <div id="activity-content"></div>
+        </div>
+        <div id="history-panel" hidden>
+          <div class="inspector-heading">已保存的版本</div>
+          <div id="history-content"></div>
+        </div>
+        <div class="inspector-foot">
+          正文与版本真实保存<br />AI 稿件仍需核对人物与新增事实
+        </div>
+      </aside>
+    </div>
+
+    <dialog id="create-dialog">
+      <form id="create-form">
+        <div class="dialog-top">
+          <span class="eyebrow">A NEW MANUSCRIPT</span
+          ><button
+            type="button"
+            id="create-close"
+            class="icon-button"
+            aria-label="关闭新建作品"
+          >
+            ×
+          </button>
+        </div>
+        <h2>从一个念头开始。</h2>
+        <p class="muted">
+          先建立作品与人物。原作锚点和章纲，稍后在写作室补充。
+        </p>
+        <label
+          >作品名<input
+            name="title"
+            required
+            maxlength="120"
+            placeholder="给尚未写完的故事一个名字"
+        /></label>
+        <div class="field-grid">
+          <label
+            >创作类型<select name="work_type">
+              <option value="original">原创小说</option>
+              <option value="fanfic">同人创作</option>
+            </select></label
+          ><label>原作名（同人）<input name="fandom" maxlength="300" /></label>
+        </div>
+        <label
+          >故事起点<textarea
+            name="opening"
+            required
+            maxlength="2000"
+            placeholder="谁，在什么处境中，想做什么？"
+          ></textarea>
+        </label>
+        <div class="field-grid">
+          <fieldset>
+            <legend>人物一</legend>
+            <label>名字<input name="name0" required maxlength="40" /></label
+            ><label
+              >核心特点<input name="trait0" required maxlength="400" /></label
+            ><label>愿望<input name="desire0" maxlength="400" /></label
+            ><label
+              >私密设定<input
+                name="secret0"
+                maxlength="400"
+                placeholder="仅该人物知道，选填"
+            /></label>
+          </fieldset>
+          <fieldset>
+            <legend>人物二</legend>
+            <label>名字<input name="name1" required maxlength="40" /></label
+            ><label
+              >核心特点<input name="trait1" required maxlength="400" /></label
+            ><label>愿望<input name="desire1" maxlength="400" /></label
+            ><label
+              >私密设定<input
+                name="secret1"
+                maxlength="400"
+                placeholder="仅该人物知道，选填"
+            /></label>
+          </fieldset>
+        </div>
+        <button type="submit" class="primary wide">
+          建立作品，进入写作室 ↗
+        </button>
+      </form>
+    </dialog>
+    <dialog id="accept-dialog">
+      <div class="dialog-top">
+        <span class="eyebrow">CONFIRM MANUSCRIPT</span
+        ><button
+          id="accept-close"
+          class="icon-button"
+          aria-label="关闭定稿确认"
+        >
+          ×
+        </button>
+      </div>
+      <h2>把这一稿，写进故事。</h2>
+      <p>
+        将保存为新的独立版本。系统只完成结构检查，不会自动识别你改动的世界事实。
+      </p>
+      <label class="check-label"
+        ><input
+          type="checkbox"
+          id="semantic-ack"
+        />我已核对人物、原作设定和新增事实</label
+      ><button id="accept-confirm" class="primary wide">确认定稿</button>
+    </dialog>
+    <dialog id="fork-dialog">
+      <div class="dialog-top">
+        <span class="eyebrow">ANOTHER POSSIBILITY</span
+        ><button id="fork-close" class="icon-button" aria-label="关闭分支">
+          ×
+        </button>
+      </div>
+      <h2>给这一章，另一种可能。</h2>
+      <p id="fork-anchor" class="muted"></p>
+      <label
+        >路线名<input
+          id="fork-title"
+          maxlength="120"
+          placeholder="另一种选择" /></label
+      ><label
+        >从这里改变什么？<textarea
+          id="fork-instruction"
+          maxlength="2000"
+        ></textarea></label
+      ><button id="fork-confirm" class="primary wide">
+        保留原稿，创建新路线 ↗
+      </button>
+    </dialog>
+    <div id="notice" role="status" aria-live="polite"></div>
+  </body>
+</html>

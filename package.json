@@ -1,0 +1,12 @@
+{
+  "name": "weijin-local-prototype",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "format": "prettier --write frontend",
+    "check": "prettier --check frontend && node --check frontend/app.js"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
+}

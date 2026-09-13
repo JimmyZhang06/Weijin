@@ -1,0 +1,105 @@
+/* Native semantics, custom picker where supported; native fallback elsewhere. */
+select.studio-select {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 40px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background-color: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+select.studio-select:hover {
+  border-color: var(--muted);
+}
+select.studio-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+select.studio-select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+select.studio-select-compact {
+  min-height: 32px;
+  padding: 6px 9px;
+  border-color: transparent;
+  background-color: transparent;
+  font-size: 12px;
+}
+@supports (appearance: base-select) {
+  select.studio-select,
+  select.studio-select::picker(select) {
+    appearance: base-select;
+  }
+  select.studio-select {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    background-image: none;
+    align-items: center;
+    gap: 16px;
+  }
+  select.studio-select::picker-icon {
+    color: var(--muted);
+    font-size: 11px;
+  }
+  select.studio-select:open {
+    border-color: var(--accent);
+  }
+  select.studio-select::picker(select) {
+    margin-block: 6px;
+    padding: 6px;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--ink);
+    box-shadow:
+      0 12px 36px rgb(0 0 0 / 0.16),
+      0 2px 6px rgb(0 0 0 / 0.05);
+    max-height: min(320px, 60vh);
+    max-width: calc(100vw - 24px);
+    min-width: min(180px, calc(100vw - 24px));
+    overflow: auto;
+    font-family: var(--sans);
+    font-size: 13px;
+  }
+  select.studio-select option {
+    min-height: 38px;
+    padding: 9px 12px;
+    border-radius: 7px;
+    gap: 10px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+  select.studio-select option:checked {
+    background: var(--soft);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  select.studio-select option:hover,
+  select.studio-select option:focus {
+    background: var(--selection);
+    outline: none;
+  }
+  select.studio-select option:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  select.studio-select option::checkmark {
+    color: var(--accent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  select.studio-select {
+    transition: none;
+  }
+}
